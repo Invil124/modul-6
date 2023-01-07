@@ -18,8 +18,7 @@ NUMBER_LESONS = ["History",
 NUMBER_PROFESORS = 4
 
 
-
-def generate_fake_data(number_students,number_profesors) -> tuple():
+def generate_fake_data(number_students, number_profesors) -> tuple():
     fake_students = []
     fake_professors = []
 
@@ -33,59 +32,57 @@ def generate_fake_data(number_students,number_profesors) -> tuple():
 
     return fake_students, fake_professors
 
+
 def prepare_group_table(number_group):
     for_groups = []
     for group in number_group:
-        for_groups.append((group, ))
+        for_groups.append((group,))
     return for_groups
+
 
 def prepare_students_table(fake_students):
     for_students = []
 
     for student in fake_students:
-        for_students.append((randint(1,len(NUMBER_GROUPS)), student ))
+        for_students.append((randint(1, len(NUMBER_GROUPS)), student))
 
     return for_students
 
+
 def prepare_lessons_table(number_lessons):
-    for_lessons =[]
+    for_lessons = []
 
     for lesson in number_lessons:
-        for_lessons.append(( randint(1,NUMBER_PROFESORS), lesson))
+        for_lessons.append((randint(1, NUMBER_PROFESORS), lesson))
 
     return for_lessons
+
 
 def prepare_professor_table(fake_professors):
     for_professors = []
 
     for profesor in fake_professors:
-        for_professors.append((profesor, ))
+        for_professors.append((profesor,))
 
     return for_professors
+
 
 def prepare_grades_table():
     for_grades = []
 
+    for i in range(1, NUMBER_STUDENTS + 1):
 
-    for i in range(1, NUMBER_STUDENTS+1):
-
-        for grades in range(1, randint(18,20)):
+        for grades in range(1, randint(18, 20)):
             date = datetime(2022, randint(1, 12), randint(1, 28)).date()
-            grade = randint(1,5)
-            lesons_id = randint(1,len(NUMBER_LESONS))
+            grade = randint(1, 5)
+            lesons_id = randint(1, len(NUMBER_LESONS))
             for_grades.append((date, grade, lesons_id, i))
 
     return for_grades
 
 
-
-
-
-
 def insert_data_to_db(group, students, lessons, profesors, grades) -> None:
-
     with sqlite3.connect('study.db') as con:
-
         cur = con.cursor()
 
         sql_to_groups = """INSERT INTO groups(group_name)
@@ -106,7 +103,7 @@ def insert_data_to_db(group, students, lessons, profesors, grades) -> None:
         sql_to_profesors = """INSERT INTO professors(profesor_name)
                               VALUES (?)"""
 
-        cur.executemany(sql_to_profesors,profesors)
+        cur.executemany(sql_to_profesors, profesors)
 
         sql_to_grades = """INSERT INTO graduates(date_of, grade, leson_id, student_id)
                               VALUES (?, ?, ?, ?)"""
@@ -117,10 +114,10 @@ def insert_data_to_db(group, students, lessons, profesors, grades) -> None:
 
 
 if __name__ == "__main__":
-    fake_students, fake_profesors = generate_fake_data(NUMBER_STUDENTS,NUMBER_PROFESORS)
+    fake_students, fake_profesors = generate_fake_data(NUMBER_STUDENTS, NUMBER_PROFESORS)
     group = prepare_group_table(NUMBER_GROUPS)
     students = prepare_students_table(fake_students)
     lessons = prepare_lessons_table(NUMBER_LESONS)
     profesors = prepare_professor_table(fake_profesors)
     grades = prepare_grades_table()
-    insert_data_to_db(group,students,lessons,profesors,grades)
+    insert_data_to_db(group, students, lessons, profesors, grades)
