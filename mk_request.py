@@ -17,3 +17,4 @@ def open_sql_query(query):
 if __name__ == "__main__":
     sql = open_sql_query("query_5.sql")
     print(execute_query(sql, "study.db"))
+    print("GIT_TEST")
